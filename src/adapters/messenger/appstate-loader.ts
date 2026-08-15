@@ -46,7 +46,7 @@ export function loadAppState(filePath: string): AppStateValidationResult {
     parsed = JSON.parse(rawContent);
   } catch (error) {
     throw new Error(
-      `AppState file at ${absolutePath} contains invalid JSON: ${error instanceof Error ? error.message : String(error)}`,
+      `AppState content contains invalid JSON: ${error instanceof Error ? error.message : String(error)}`,
       { cause: error },
     );
   }

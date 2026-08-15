@@ -1,0 +1,47 @@
+[
+  {
+    "key": "c_user",
+    "value": "100089123456789",
+    "domain": "facebook.com",
+    "path": "/",
+    "hostOnly": false,
+    "creation": "2026-08-16T00:00:00.000Z",
+    "lastAccessed": "2026-08-16T00:00:00.000Z"
+  },
+  {
+    "key": "xs",
+    "value": "24%3Amockup_session_token%3A2%3A1712345678",
+    "domain": "facebook.com",
+    "path": "/",
+    "hostOnly": false,
+    "creation": "2026-08-16T00:00:00.000Z",
+    "lastAccessed": "2026-08-16T00:00:00.000Z"
+  },
+  {
+    "key": "fr",
+    "value": "0mockupSecurityCookieValue12345",
+    "domain": "facebook.com",
+    "path": "/",
+    "hostOnly": false,
+    "creation": "2026-08-16T00:00:00.000Z",
+    "lastAccessed": "2026-08-16T00:00:00.000Z"
+  },
+  {
+    "key": "datr",
+    "value": "mockupDatrToken778899",
+    "domain": "facebook.com",
+    "path": "/",
+    "hostOnly": false,
+    "creation": "2026-08-16T00:00:00.000Z",
+    "lastAccessed": "2026-08-16T00:00:00.000Z"
+  },
+  {
+    "key": "sb",
+    "value": "mockupSbToken112233",
+    "domain": "facebook.com",
+    "path": "/",
+    "hostOnly": false,
+    "creation": "2026-08-16T00:00:00.000Z",
+    "lastAccessed": "2026-08-16T00:00:00.000Z"
+  }
+]

@@ -21,6 +21,14 @@
     "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest",
+    "dashboard": "node --import tsx src/index.ts --dashboard",
+    "dashboard:dev": "node --watch --import tsx src/index.ts --dashboard",
+    "client": "node --import tsx src/index.ts --client",
+    "client:dev": "node --watch --import tsx src/index.ts --client",
+    "client:create": "node --import tsx src/index.ts --create-client",
+    "client:list": "node --import tsx src/index.ts --list-clients",
+    "client:hits": "node --import tsx src/index.ts --hits",
+    "client:pm2": "node --import tsx src/index.ts --pm2",
     "check": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build"
   },
   "dependencies": {

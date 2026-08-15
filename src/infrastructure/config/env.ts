@@ -78,10 +78,14 @@ const envSchema = z.object({
   ACTIVE_WINDOWS: z.string().min(1).transform(parseActiveWindows),
   COOLDOWN_MS: positiveInteger('COOLDOWN_MS').default(300_000),
   MAX_EVENT_AGE_MS: positiveInteger('MAX_EVENT_AGE_MS').default(10_000),
+  CLIENT_NAME: z.string().trim().default('default'),
+  ADMIN_KEY: z.string().trim().default('apex_admin'),
+  CLIENT_PIN: z.string().trim().default('1234'),
   HEALTH_HOST: z.string().min(1).default('127.0.0.1'),
   HEALTH_PORT: z.coerce.number().int().min(0).max(65_535).default(3000),
   STATE_DB_PATH: z.string().trim().min(1).default('./data/worker.sqlite'),
   APP_STATE_PATH: z.string().trim().min(1).default('./data/appstate.json'),
+  HITS_LOG_PATH: z.string().trim().default('./data/hits.jsonl'),
   TYPING_DELAY_MS: z.coerce
     .number()
     .int()

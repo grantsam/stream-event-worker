@@ -1,0 +1,2019 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Apex Sniper — Automation Chat Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-base: #06080e;
+        --bg-surface: rgba(14, 18, 28, 0.75);
+        --bg-surface-elevated: rgba(22, 28, 45, 0.85);
+        --border-subtle: rgba(255, 255, 255, 0.07);
+        --border-focus: rgba(0, 242, 254, 0.5);
+        --primary: #00f2fe;
+        --primary-glow: rgba(0, 242, 254, 0.35);
+        --accent: #4facfe;
+        --indigo: #6366f1;
+        --indigo-glow: rgba(99, 102, 241, 0.3);
+        --success: #10b981;
+        --success-glow: rgba(16, 185, 129, 0.3);
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --danger-glow: rgba(239, 68, 68, 0.3);
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+        --text-dim: #64748b;
+        --radius-sm: 6px;
+        --radius-md: 10px;
+        --radius-lg: 16px;
+        --radius-full: 9999px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family:
+          'Plus Jakarta Sans',
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
+      }
+
+      body {
+        background-color: var(--bg-base);
+        background-image:
+          radial-gradient(
+            circle at 10% 10%,
+            rgba(0, 242, 254, 0.07) 0%,
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 90% 90%,
+            rgba(99, 102, 241, 0.08) 0%,
+            transparent 45%
+          ),
+          radial-gradient(
+            circle at 50% 50%,
+            rgba(16, 185, 129, 0.04) 0%,
+            transparent 60%
+          );
+        background-attachment: fixed;
+        color: var(--text-main);
+        min-height: 100vh;
+        padding: 1.5rem 1.25rem 3rem;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        max-width: 1320px;
+        margin: 0 auto;
+      }
+
+      /* Icon Utility */
+      .icon {
+        width: 18px;
+        height: 18px;
+        stroke-width: 2;
+        stroke: currentColor;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        display: inline-block;
+        vertical-align: middle;
+        flex-shrink: 0;
+      }
+
+      .icon-sm {
+        width: 14px;
+        height: 14px;
+      }
+      .icon-lg {
+        width: 22px;
+        height: 22px;
+      }
+
+      /* Top Navigation / Header */
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 1.75rem;
+        border-bottom: 1px solid var(--border-subtle);
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+        gap: 1.25rem;
+      }
+
+      .brand-wrap {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .brand-logo {
+        width: 44px;
+        height: 44px;
+        border-radius: var(--radius-md);
+        background: linear-gradient(
+          135deg,
+          #00f2fe 0%,
+          #4facfe 50%,
+          #6366f1 100%
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #06080e;
+        box-shadow: 0 0 20px var(--primary-glow);
+      }
+
+      .logo-group h1 {
+        font-size: 1.5rem;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .logo-group h1 .gradient-text {
+        background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .logo-group p {
+        color: var(--text-muted);
+        font-size: 0.8125rem;
+        font-weight: 500;
+        margin-top: 0.15rem;
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .user-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-full);
+        padding: 0.4rem 0.85rem;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: var(--text-main);
+      }
+
+      /* Buttons */
+      button,
+      .btn {
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.875rem;
+        border-radius: var(--radius-md);
+        transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        border: none;
+        outline: none;
+        text-decoration: none;
+        user-select: none;
+      }
+
+      button:focus-visible {
+        box-shadow:
+          0 0 0 2px var(--bg-base),
+          0 0 0 4px var(--primary);
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+        color: #06080e;
+        padding: 0.65rem 1.25rem;
+        box-shadow: 0 4px 16px var(--primary-glow);
+      }
+      .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 22px var(--primary-glow);
+      }
+
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--text-main);
+        border: 1px solid var(--border-subtle);
+        padding: 0.65rem 1.15rem;
+      }
+      .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.15);
+      }
+
+      .btn-sm {
+        padding: 0.45rem 0.85rem;
+        font-size: 0.8rem;
+        border-radius: var(--radius-sm);
+      }
+
+      .btn-start {
+        background: rgba(16, 185, 129, 0.12);
+        color: #10b981;
+        border: 1px solid rgba(16, 185, 129, 0.35);
+      }
+      .btn-start:hover {
+        background: #10b981;
+        color: #06080e;
+        box-shadow: 0 0 14px var(--success-glow);
+      }
+
+      .btn-stop {
+        background: rgba(239, 68, 68, 0.12);
+        color: #ef4444;
+        border: 1px solid rgba(239, 68, 68, 0.35);
+      }
+      .btn-stop:hover {
+        background: #ef4444;
+        color: #fff;
+        box-shadow: 0 0 14px var(--danger-glow);
+      }
+
+      /* Stats Grid */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2.25rem;
+      }
+
+      .stat-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-subtle);
+        backdrop-filter: blur(16px);
+        border-radius: var(--radius-lg);
+        padding: 1.25rem 1.4rem;
+        position: relative;
+        overflow: hidden;
+        transition: border-color 0.2s;
+      }
+      .stat-card:hover {
+        border-color: rgba(255, 255, 255, 0.15);
+      }
+
+      .stat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .stat-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.75px;
+        color: var(--text-muted);
+        font-weight: 700;
+      }
+
+      .stat-icon-wrap {
+        width: 32px;
+        height: 32px;
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--text-muted);
+      }
+
+      .stat-value {
+        font-size: 1.875rem;
+        font-weight: 800;
+        margin-top: 0.5rem;
+        color: #fff;
+      }
+
+      .stat-value.highlight {
+        color: #00f2fe;
+        text-shadow: 0 0 16px var(--primary-glow);
+      }
+      .stat-value.success {
+        color: #10b981;
+        text-shadow: 0 0 16px var(--success-glow);
+      }
+
+      /* Section Headers */
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.15rem;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+
+      .section-title {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      /* Client Grid */
+      .client-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+        gap: 1.25rem;
+        margin-bottom: 2.75rem;
+      }
+
+      .client-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-subtle);
+        backdrop-filter: blur(16px);
+        border-radius: var(--radius-lg);
+        padding: 1.4rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 1.15rem;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .client-card:hover {
+        border-color: rgba(0, 242, 254, 0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      }
+
+      .client-card-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+
+      .client-avatar-name {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .client-avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: var(--radius-md);
+        background: linear-gradient(
+          135deg,
+          rgba(0, 242, 254, 0.15),
+          rgba(99, 102, 241, 0.25)
+        );
+        border: 1px solid rgba(0, 242, 254, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #00f2fe;
+        font-weight: 700;
+        font-size: 0.95rem;
+      }
+
+      .client-name {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #fff;
+      }
+
+      .client-pin-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        font-size: 0.7rem;
+        font-family: 'JetBrains Mono', monospace;
+        color: var(--primary);
+        background: rgba(0, 242, 254, 0.08);
+        padding: 0.15rem 0.45rem;
+        border-radius: 4px;
+        margin-top: 0.2rem;
+      }
+
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.725rem;
+        font-weight: 700;
+        padding: 0.3rem 0.65rem;
+        border-radius: var(--radius-full);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .status-badge.online {
+        background: rgba(16, 185, 129, 0.12);
+        color: #10b981;
+        border: 1px solid rgba(16, 185, 129, 0.3);
+      }
+      .status-badge.online .pulse-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #10b981;
+        box-shadow: 0 0 8px #10b981;
+        animation: pulse 1.8s infinite;
+      }
+
+      .status-badge.offline {
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+        border: 1px solid rgba(239, 68, 68, 0.25);
+      }
+      .status-badge.offline .pulse-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #ef4444;
+      }
+
+      @keyframes pulse {
+        0% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.4;
+          transform: scale(1.3);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .client-meta-box {
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        border-radius: var(--radius-md);
+        padding: 0.85rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.8125rem;
+      }
+
+      .meta-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .meta-label {
+        color: var(--text-dim);
+        font-size: 0.725rem;
+        text-transform: uppercase;
+      }
+
+      .meta-val {
+        color: var(--text-main);
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 200px;
+      }
+
+      .client-actions {
+        display: flex;
+        gap: 0.45rem;
+        flex-wrap: wrap;
+      }
+
+      /* Table Component */
+      .table-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-lg);
+        backdrop-filter: blur(16px);
+        overflow: hidden;
+        margin-bottom: 2.5rem;
+      }
+
+      .table-responsive {
+        overflow-x: auto;
+        width: 100%;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+        font-size: 0.875rem;
+      }
+
+      th,
+      td {
+        padding: 1.1rem 1.25rem;
+        border-bottom: 1px solid var(--border-subtle);
+      }
+
+      th {
+        background: rgba(0, 0, 0, 0.4);
+        color: var(--text-muted);
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.725rem;
+        letter-spacing: 0.75px;
+      }
+
+      tr:last-child td {
+        border-bottom: none;
+      }
+
+      tr:hover td {
+        background: rgba(255, 255, 255, 0.02);
+      }
+
+      .rank-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-weight: 700;
+        color: #fff;
+      }
+
+      .rank-pill.first {
+        color: #00f2fe;
+        text-shadow: 0 0 10px var(--primary-glow);
+      }
+
+      .speed-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-family: 'JetBrains Mono', monospace;
+        font-weight: 700;
+        padding: 0.25rem 0.6rem;
+        border-radius: var(--radius-sm);
+        background: rgba(0, 242, 254, 0.1);
+        color: #00f2fe;
+        border: 1px solid rgba(0, 242, 254, 0.25);
+      }
+
+      .lead-text {
+        font-size: 0.75rem;
+        color: #10b981;
+        font-weight: 600;
+        margin-top: 0.3rem;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+      }
+
+      .verdict-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 0.35rem 0.75rem;
+        border-radius: var(--radius-full);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .verdict-tag.won {
+        background: rgba(16, 185, 129, 0.15);
+        color: #10b981;
+        border: 1px solid rgba(16, 185, 129, 0.35);
+        box-shadow: 0 0 12px var(--success-glow);
+      }
+
+      .verdict-tag.pending {
+        background: rgba(245, 158, 11, 0.12);
+        color: #f59e0b;
+        border: 1px solid rgba(245, 158, 11, 0.35);
+      }
+
+      .verdict-tag.missed {
+        background: rgba(239, 68, 68, 0.12);
+        color: #ef4444;
+        border: 1px solid rgba(239, 68, 68, 0.35);
+      }
+
+      .verdict-button-group {
+        display: flex;
+        gap: 0.3rem;
+        margin-top: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .btn-verdict {
+        padding: 0.25rem 0.55rem;
+        font-size: 0.725rem;
+        font-weight: 600;
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--text-muted);
+        border: 1px solid var(--border-subtle);
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+      .btn-verdict:hover {
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+      }
+      .btn-verdict.win:hover {
+        background: rgba(16, 185, 129, 0.25);
+        color: #10b981;
+        border-color: rgba(16, 185, 129, 0.4);
+      }
+      .btn-verdict.miss:hover {
+        background: rgba(239, 68, 68, 0.25);
+        color: #ef4444;
+        border-color: rgba(239, 68, 68, 0.4);
+      }
+      .btn-verdict.active.win {
+        background: rgba(16, 185, 129, 0.35);
+        color: #10b981;
+        border-color: #10b981;
+        box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+        font-weight: 800;
+      }
+      .btn-verdict.active.miss {
+        background: rgba(239, 68, 68, 0.35);
+        color: #ef4444;
+        border-color: #ef4444;
+        box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+        font-weight: 800;
+      }
+
+      /* Modals */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(6, 8, 14, 0.82);
+        backdrop-filter: blur(12px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 1.25rem;
+        z-index: 100;
+      }
+
+      .modal-overlay.active {
+        display: flex;
+      }
+
+      .modal-card {
+        background: #0d111c;
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-lg);
+        width: 100%;
+        max-width: 620px;
+        max-height: 90vh;
+        overflow-y: auto;
+        padding: 1.75rem;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border-subtle);
+      }
+
+      .modal-header h2 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .btn-close {
+        width: 32px;
+        height: 32px;
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--text-muted);
+      }
+      .btn-close:hover {
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+      }
+
+      /* Forms */
+      .form-group {
+        margin-bottom: 1.15rem;
+      }
+
+      .form-group label {
+        display: block;
+        font-size: 0.775rem;
+        font-weight: 700;
+        color: var(--text-muted);
+        margin-bottom: 0.4rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .form-control {
+        width: 100%;
+        background: rgba(0, 0, 0, 0.35);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-md);
+        padding: 0.75rem 0.95rem;
+        color: #fff;
+        font-size: 0.9375rem;
+        outline: none;
+        transition: all 0.2s;
+      }
+
+      .form-control:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(0, 242, 254, 0.15);
+      }
+
+      textarea.form-control {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.8125rem;
+        resize: vertical;
+        min-height: 100px;
+      }
+
+      /* Terminal Console */
+      .terminal-box {
+        background: #04060a;
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-md);
+        padding: 1.1rem;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.8125rem;
+        color: #38ef7d;
+        max-height: 320px;
+        overflow-y: auto;
+        white-space: pre-wrap;
+        line-height: 1.6;
+      }
+
+      /* Race Timeline */
+      .race-timeline {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-top: 1rem;
+      }
+
+      .race-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.35);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-md);
+        padding: 0.85rem 1.15rem;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.85rem;
+      }
+
+      .race-item.is-us {
+        border-color: #00f2fe;
+        background: rgba(0, 242, 254, 0.08);
+        box-shadow: 0 0 20px rgba(0, 242, 254, 0.15);
+      }
+
+      .race-rank-icon {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.75rem;
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .race-rank-icon.gold {
+        background: #eab308;
+        color: #06080e;
+      }
+      .race-rank-icon.silver {
+        background: #94a3b8;
+        color: #06080e;
+      }
+      .race-rank-icon.bronze {
+        background: #b45309;
+        color: #fff;
+      }
+
+      /* Auth Modal Tabs */
+      .auth-tabs {
+        display: flex;
+        border-bottom: 1px solid var(--border-subtle);
+        margin-bottom: 1.5rem;
+      }
+
+      .auth-tab {
+        flex: 1;
+        padding: 0.75rem 1rem;
+        text-align: center;
+        font-weight: 600;
+        font-size: 0.875rem;
+        color: var(--text-muted);
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+      }
+
+      .auth-tab.active {
+        color: #00f2fe;
+        border-bottom-color: #00f2fe;
+      }
+
+      /* Toast Notification */
+      .toast-container {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        z-index: 999;
+        pointer-events: none;
+      }
+
+      .toast {
+        background: #0f1422;
+        border: 1px solid var(--border-subtle);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        color: #fff;
+        padding: 0.85rem 1.25rem;
+        border-radius: var(--radius-md);
+        font-size: 0.875rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        animation: slideIn 0.25s ease forwards;
+      }
+      .toast.success {
+        border-color: rgba(16, 185, 129, 0.5);
+        color: #10b981;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateY(20px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding: 1rem;
+        }
+        .header-actions {
+          width: 100%;
+        }
+        .btn-primary,
+        .btn-secondary {
+          flex: 1;
+          justify-content: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Top Header -->
+      <header>
+        <div class="brand-wrap">
+          <div class="brand-logo">
+            <svg class="icon icon-lg" viewBox="0 0 24 24">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg>
+          </div>
+          <div class="logo-group">
+            <h1>APEX <span class="gradient-text">CHAT SNIPER</span></h1>
+            <p id="portalSubtitle">
+              Autonomous High-Frequency Messenger Booking Engine
+            </p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <div class="user-pill" id="userBadge">
+            <svg class="icon icon-sm" viewBox="0 0 24 24">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+            <span id="userRoleText">Admin</span>
+          </div>
+          <button class="btn-secondary btn-sm" onclick="fetchData()">
+            <svg class="icon icon-sm" viewBox="0 0 24 24">
+              <path
+                d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"
+              />
+            </svg>
+            Refresh
+          </button>
+          <button
+            class="btn-primary btn-sm admin-only"
+            onclick="openAddModal()"
+          >
+            <svg class="icon icon-sm" viewBox="0 0 24 24">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            Add Client
+          </button>
+          <button class="btn-secondary btn-sm" onclick="logout()">
+            <svg class="icon icon-sm" viewBox="0 0 24 24">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            Logout
+          </button>
+        </div>
+      </header>
+
+      <!-- Global Stats Bar -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label" id="statLabel1">Active Accounts</span>
+            <div class="stat-icon-wrap">
+              <svg class="icon icon-sm" viewBox="0 0 24 24">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+            </div>
+          </div>
+          <div class="stat-value" id="statTotalClients">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Bot Status</span>
+            <div class="stat-icon-wrap">
+              <svg class="icon icon-sm" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="2" />
+                <path
+                  d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"
+                />
+              </svg>
+            </div>
+          </div>
+          <div class="stat-value highlight" id="statRunningBots">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Confirmed Win Rate</span>
+            <div class="stat-icon-wrap">
+              <svg class="icon icon-sm" viewBox="0 0 24 24">
+                <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+                <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+                <path d="M4 22h16" />
+                <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+              </svg>
+            </div>
+          </div>
+          <div class="stat-value success" id="statWinRate">100%</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Fastest Reaction Time</span>
+            <div class="stat-icon-wrap">
+              <svg class="icon icon-sm" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+            </div>
+          </div>
+          <div class="stat-value highlight" id="statFastestSpeed">-- ms</div>
+        </div>
+      </div>
+
+      <!-- Active Client Bots -->
+      <div class="section-header">
+        <div class="section-title">
+          <svg class="icon" viewBox="0 0 24 24">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+            <line x1="8" y1="21" x2="16" y2="21" />
+            <line x1="12" y1="17" x2="12" y2="21" />
+          </svg>
+          <span id="clientSectionTitle">Client Account Profiles</span>
+        </div>
+      </div>
+      <div class="client-grid" id="clientGrid">
+        <div style="color: var(--text-muted); font-size: 0.9rem">
+          Loading client profiles...
+        </div>
+      </div>
+
+      <!-- Two-Sided Hit Tracking Table -->
+      <div class="section-header">
+        <div class="section-title">
+          <svg class="icon" viewBox="0 0 24 24">
+            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+            <path d="M4 22h16" />
+            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+          </svg>
+          Two-Sided Hit Telemetry & Competitor Analysis
+        </div>
+      </div>
+      <div class="table-card">
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Client</th>
+                <th>Trigger Phrase</th>
+                <th>Side A: System & Competitors</th>
+                <th>Side B: Admin Official Verdict</th>
+                <th>Actions & Telemetry</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboardBody">
+              <tr>
+                <td
+                  colspan="6"
+                  style="
+                    text-align: center;
+                    color: var(--text-muted);
+                    padding: 2rem;
+                  "
+                >
+                  No winning hits recorded yet. Once a bot claims a slot, live
+                  telemetry appears here!
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Auth Lock Modal -->
+    <div class="modal-overlay" id="authModal">
+      <div class="modal-card" style="max-width: 440px">
+        <div style="text-align: center; margin-bottom: 1.5rem">
+          <div class="brand-logo" style="margin: 0 auto 0.75rem auto">
+            <svg class="icon icon-lg" viewBox="0 0 24 24">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg>
+          </div>
+          <h2 style="font-size: 1.25rem; font-weight: 800">
+            Apex Sniper Access
+          </h2>
+          <p
+            style="
+              font-size: 0.8125rem;
+              color: var(--text-muted);
+              margin-top: 0.25rem;
+            "
+          >
+            Sign in to access your dashboard
+          </p>
+        </div>
+
+        <div class="auth-tabs">
+          <div
+            class="auth-tab active"
+            id="tabAdmin"
+            onclick="switchAuthTab('admin')"
+          >
+            👑 Master Admin
+          </div>
+          <div
+            class="auth-tab"
+            id="tabClient"
+            onclick="switchAuthTab('client')"
+          >
+            👤 Client Portal
+          </div>
+        </div>
+
+        <form id="adminLoginForm" onsubmit="handleAdminLogin(event)">
+          <div class="form-group">
+            <label>Admin Password</label>
+            <input
+              type="password"
+              id="loginAdminKey"
+              class="form-control"
+              placeholder="Enter master password"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            class="btn-primary"
+            style="width: 100%; justify-content: center; margin-top: 1rem"
+          >
+            Unlock Dashboard
+          </button>
+        </form>
+
+        <form
+          id="clientLoginForm"
+          onsubmit="handleClientLogin(event)"
+          style="display: none"
+        >
+          <div class="form-group">
+            <label>Client Name</label>
+            <input
+              type="text"
+              id="loginClientName"
+              class="form-control"
+              placeholder="e.g. samuel_vip"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>4-Digit Access PIN</label>
+            <input
+              type="password"
+              id="loginClientPin"
+              class="form-control"
+              placeholder="e.g. 1234"
+              maxlength="6"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            class="btn-primary"
+            style="width: 100%; justify-content: center; margin-top: 1rem"
+          >
+            Enter My Portal
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Add / Edit Client Modal -->
+    <div class="modal-overlay" id="addModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2 id="modalTitle">
+            <svg class="icon" viewBox="0 0 24 24">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            Add Client Account
+          </h2>
+          <button class="btn-close" onclick="closeAddModal()">
+            <svg class="icon icon-sm" viewBox="0 0 24 24">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+        <form id="clientForm" onsubmit="saveClient(event)">
+          <div class="form-group">
+            <label>Client Name (Unique Identifier)</label>
+            <input
+              type="text"
+              id="formName"
+              class="form-control"
+              placeholder="e.g. samuel_vip"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>Target Group Chat / Thread ID</label>
+            <input
+              type="text"
+              id="formThread"
+              class="form-control"
+              placeholder="28798413846428584"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>Authorized Sender ID (Admin UID)</label>
+            <input
+              type="text"
+              id="formSender"
+              class="form-control"
+              placeholder="100005890597158"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>Trigger Phrase(s) (Comma separated)</label>
+            <input
+              type="text"
+              id="formTrigger"
+              class="form-control"
+              placeholder="open book, book now"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>Response / Reply Text</label>
+            <input
+              type="text"
+              id="formResponse"
+              class="form-control"
+              placeholder="Me down"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>Typing Delay (ms)</label>
+            <input
+              type="number"
+              id="formTyping"
+              class="form-control"
+              value="150"
+              min="0"
+              max="3000"
+            />
+          </div>
+          <div class="form-group">
+            <label>Session Cookies (Paste appstate.json array)</label>
+            <textarea
+              id="formCookies"
+              class="form-control"
+              placeholder='[{"key":"c_user","value":"..."},{"key":"xs","value":"..."}]'
+            ></textarea>
+          </div>
+          <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem">
+            <button
+              type="button"
+              class="btn-secondary"
+              onclick="closeAddModal()"
+              style="flex: 1; justify-content: center"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="btn-primary"
+              style="flex: 2; justify-content: center"
+            >
+              Save & Configure
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Live Logs Modal -->
+    <div class="modal-overlay" id="logsModal">
+      <div class="modal-card" style="max-width: 720px">
+        <div class="modal-header">
+          <h2 id="logsTitle">
+            <svg class="icon" viewBox="0 0 24 24">
+              <polyline points="4 17 10 11 4 5" />
+              <line x1="12" y1="19" x2="20" y2="19" />
+            </svg>
+            Live Telemetry Stream
+          </h2>
+          <button class="btn-close" onclick="closeLogsModal()">
+            <svg class="icon icon-sm" viewBox="0 0 24 24">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+        <div class="terminal-box" id="logsContent">
+          Connecting to MQTT log stream...
+        </div>
+        <div
+          style="margin-top: 1.25rem; display: flex; justify-content: flex-end"
+        >
+          <button class="btn-secondary" onclick="closeLogsModal()">
+            Close Console
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Race Replay Modal -->
+    <div class="modal-overlay" id="raceModal">
+      <div class="modal-card" style="max-width: 680px">
+        <div class="modal-header">
+          <h2 id="raceTitle">
+            <svg class="icon" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            Competitor Race Breakdown
+          </h2>
+          <button class="btn-close" onclick="closeRaceModal()">
+            <svg class="icon icon-sm" viewBox="0 0 24 24">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+        <p
+          style="
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            margin-bottom: 1.25rem;
+          "
+        >
+          Chronological sequence of all contender messages received in the group
+          chat after the admin's trigger:
+        </p>
+        <div class="race-timeline" id="raceTimeline">
+          <div>Loading race timeline...</div>
+        </div>
+        <div
+          style="margin-top: 1.5rem; display: flex; justify-content: flex-end"
+        >
+          <button class="btn-secondary" onclick="closeRaceModal()">
+            Close Replay
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+      let activeLogInterval = null;
+      let cachedHits = [];
+      let currentAuth = { role: null, clientName: null, key: null, pin: null };
+
+      function initAuth() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlKey = urlParams.get('key');
+        const urlPortal = urlParams.get('portal') || urlParams.get('client');
+        const urlPin = urlParams.get('pin');
+
+        if (urlKey) {
+          currentAuth = { role: 'admin', key: urlKey };
+          sessionStorage.setItem('apex_auth', JSON.stringify(currentAuth));
+        } else if (urlPortal && urlPin) {
+          currentAuth = { role: 'client', clientName: urlPortal, pin: urlPin };
+          sessionStorage.setItem('apex_auth', JSON.stringify(currentAuth));
+        } else {
+          const saved = sessionStorage.getItem('apex_auth');
+          if (saved) {
+            try {
+              currentAuth = JSON.parse(saved);
+            } catch {}
+          }
+        }
+
+        if (!currentAuth.role) {
+          document.getElementById('authModal').classList.add('active');
+        } else {
+          applyAuthView();
+          fetchData();
+        }
+      }
+
+      function applyAuthView() {
+        document.getElementById('authModal').classList.remove('active');
+        const isClient = currentAuth.role === 'client';
+
+        document.querySelectorAll('.admin-only').forEach((el) => {
+          el.style.display = isClient ? 'none' : '';
+        });
+
+        if (isClient) {
+          document.getElementById('userRoleText').textContent =
+            `${currentAuth.clientName}'s Portal`;
+          document.getElementById('portalSubtitle').textContent =
+            `Private Sniper Portal for ${currentAuth.clientName}`;
+          document.getElementById('clientSectionTitle').textContent =
+            `My Account Profile`;
+          document.getElementById('statLabel1').textContent = `My Account`;
+        } else {
+          document.getElementById('userRoleText').textContent = 'Master Admin';
+          document.getElementById('portalSubtitle').textContent =
+            'Autonomous High-Frequency Messenger Booking Engine';
+          document.getElementById('clientSectionTitle').textContent =
+            'Client Account Profiles';
+          document.getElementById('statLabel1').textContent = 'Active Accounts';
+        }
+      }
+
+      function switchAuthTab(tab) {
+        document
+          .getElementById('tabAdmin')
+          .classList.toggle('active', tab === 'admin');
+        document
+          .getElementById('tabClient')
+          .classList.toggle('active', tab === 'client');
+        document.getElementById('adminLoginForm').style.display =
+          tab === 'admin' ? 'block' : 'none';
+        document.getElementById('clientLoginForm').style.display =
+          tab === 'client' ? 'block' : 'none';
+      }
+
+      async function handleAdminLogin(e) {
+        e.preventDefault();
+        const adminKey = document.getElementById('loginAdminKey').value.trim();
+        try {
+          const res = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ adminKey }),
+          }).then((r) => r.json());
+
+          if (res.success) {
+            currentAuth = { role: 'admin', key: adminKey };
+            sessionStorage.setItem('apex_auth', JSON.stringify(currentAuth));
+            applyAuthView();
+            fetchData();
+          } else {
+            alert(res.error || 'Invalid password');
+          }
+        } catch {
+          alert('Authentication failed');
+        }
+      }
+
+      async function handleClientLogin(e) {
+        e.preventDefault();
+        const clientName = document
+          .getElementById('loginClientName')
+          .value.trim();
+        const pin = document.getElementById('loginClientPin').value.trim();
+        try {
+          const res = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ clientName, pin }),
+          }).then((r) => r.json());
+
+          if (res.success) {
+            currentAuth = { role: 'client', clientName, pin };
+            sessionStorage.setItem('apex_auth', JSON.stringify(currentAuth));
+            applyAuthView();
+            fetchData();
+          } else {
+            alert(res.error || 'Invalid client name or PIN');
+          }
+        } catch {
+          alert('Authentication failed');
+        }
+      }
+
+      function logout() {
+        sessionStorage.removeItem('apex_auth');
+        currentAuth = { role: null };
+        window.location.href = window.location.pathname;
+      }
+
+      function showToast(message, type = 'success') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.innerHTML = `<svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> ${message}`;
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 3200);
+      }
+
+      function getAuthHeaders() {
+        const headers = { 'Content-Type': 'application/json' };
+        if (currentAuth.role === 'admin' && currentAuth.key) {
+          headers['x-admin-key'] = currentAuth.key;
+        } else if (
+          currentAuth.role === 'client' &&
+          currentAuth.clientName &&
+          currentAuth.pin
+        ) {
+          headers['x-client-name'] = currentAuth.clientName;
+          headers['x-client-pin'] = currentAuth.pin;
+        }
+        return headers;
+      }
+
+      function copyClientLink(name, pin) {
+        const url = `${window.location.origin}${window.location.pathname}?portal=${encodeURIComponent(name)}&pin=${encodeURIComponent(pin)}`;
+        navigator.clipboard.writeText(url).then(() => {
+          showToast(`Copied portal link for ${name}!`);
+        });
+      }
+
+      async function fetchData() {
+        if (!currentAuth.role) return;
+
+        try {
+          if (currentAuth.role === 'client') {
+            const res = await fetch(
+              `/api/portal/${encodeURIComponent(currentAuth.clientName)}`,
+              { headers: getAuthHeaders() },
+            ).then((r) => r.json());
+            if (res.error) {
+              logout();
+              return;
+            }
+            cachedHits = res.hits || [];
+            renderClients([res.profile]);
+            renderHits(cachedHits);
+            updateStats([res.profile], cachedHits);
+          } else {
+            const [clientsRes, hitsRes] = await Promise.all([
+              fetch('/api/clients', { headers: getAuthHeaders() }).then((r) =>
+                r.json(),
+              ),
+              fetch('/api/hits', { headers: getAuthHeaders() }).then((r) =>
+                r.json(),
+              ),
+            ]);
+
+            cachedHits = hitsRes;
+            renderClients(clientsRes);
+            renderHits(hitsRes);
+            updateStats(clientsRes, hitsRes);
+          }
+        } catch (err) {
+          console.error('Failed to fetch data:', err);
+        }
+      }
+
+      function updateStats(clients, hits) {
+        document.getElementById('statTotalClients').textContent =
+          clients.length;
+        const runningCount = clients.filter((c) => c.isRunning).length;
+        document.getElementById('statRunningBots').textContent = runningCount;
+
+        if (hits.length > 0) {
+          const wonCount = hits.filter(
+            (h) => h.adminDecision === 'CONFIRMED_WIN',
+          ).length;
+          const decidedCount = hits.filter(
+            (h) =>
+              h.adminDecision === 'CONFIRMED_WIN' ||
+              h.adminDecision === 'MISSED',
+          ).length;
+          const winRate =
+            decidedCount > 0
+              ? ((wonCount / decidedCount) * 100).toFixed(0)
+              : 100;
+          document.getElementById('statWinRate').textContent =
+            `${winRate}% (${wonCount}/${hits.length})`;
+
+          const fastest = Math.min(...hits.map((h) => h.reactionTimeMs));
+          document.getElementById('statFastestSpeed').textContent =
+            `${fastest.toFixed(1)} ms`;
+        } else {
+          document.getElementById('statWinRate').textContent = '100%';
+          document.getElementById('statFastestSpeed').textContent = '-- ms';
+        }
+      }
+
+      function renderClients(clients) {
+        const grid = document.getElementById('clientGrid');
+        if (clients.length === 0) {
+          grid.innerHTML =
+            '<div style="color: var(--text-muted); grid-column: 1/-1; padding: 2rem; background: var(--bg-surface); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); text-align: center;">No client profiles configured yet. Click "Add New Client" above to onboard your first account!</div>';
+          return;
+        }
+
+        const isAdmin = currentAuth.role === 'admin';
+
+        grid.innerHTML = clients
+          .map(
+            (c) => `
+        <div class="client-card">
+          <div class="client-card-top">
+            <div class="client-avatar-name">
+              <div class="client-avatar">${escapeHtml(c.name.slice(0, 2).toUpperCase())}</div>
+              <div>
+                <div class="client-name">${escapeHtml(c.name)}</div>
+                ${isAdmin ? `<div class="client-pin-badge">PIN: ${escapeHtml(c.pin || '1234')}</div>` : ''}
+              </div>
+            </div>
+            <span class="status-badge ${c.isRunning ? 'online' : 'offline'}">
+              <span class="pulse-dot"></span>
+              ${c.isRunning ? 'ONLINE' : 'STOPPED'}
+            </span>
+          </div>
+
+          <div class="client-meta-box">
+            <div class="meta-row">
+              <span class="meta-label">Thread ID</span>
+              <span class="meta-val">${escapeHtml(c.targetThreadId)}</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-label">Trigger</span>
+              <span class="meta-val">"${escapeHtml(c.triggerPhrases)}"</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-label">Response</span>
+              <span class="meta-val">"${escapeHtml(c.responseText)}"</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-label">Rounds Won</span>
+              <span class="meta-val" style="color: #00f2fe; font-weight: 700;">${c.totalHits} rounds</span>
+            </div>
+          </div>
+
+          <div class="client-actions">
+            ${
+              c.isRunning
+                ? `<button class="btn-sm btn-stop" style="flex:1;" onclick="stopClient('${escapeHtml(c.name)}')">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12"/></svg> Stop
+                 </button>`
+                : `<button class="btn-sm btn-start" style="flex:1;" onclick="startClient('${escapeHtml(c.name)}')">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg> Launch
+                 </button>`
+            }
+            <button class="btn-secondary btn-sm" onclick="openLogsModal('${escapeHtml(c.name)}')">
+              <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+              Logs
+            </button>
+            <button class="btn-secondary btn-sm" onclick="editClient('${escapeHtml(c.name)}', '${escapeHtml(c.targetThreadId)}', '${escapeHtml(c.triggerPhrases)}', '${escapeHtml(c.responseText)}')">
+              <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </button>
+            ${
+              isAdmin
+                ? `
+              <button class="btn-secondary btn-sm" title="Copy 1-Click Client Portal Link" onclick="copyClientLink('${escapeHtml(c.name)}', '${escapeHtml(c.pin || '1234')}')">
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+              </button>
+            `
+                : ''
+            }
+          </div>
+        </div>
+      `,
+          )
+          .join('');
+      }
+
+      function renderHits(hits) {
+        const tbody = document.getElementById('leaderboardBody');
+        if (hits.length === 0) {
+          tbody.innerHTML =
+            '<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2.5rem;">No winning hits recorded yet. Once a bot claims a slot, live race telemetry appears here!</td></tr>';
+          return;
+        }
+
+        const isAdmin = currentAuth.role === 'admin';
+
+        tbody.innerHTML = hits
+          .map((hit) => {
+            const rank = hit.ourRankInQueue ?? 1;
+            const total = hit.totalContenders ?? hit.contenders?.length ?? 1;
+            const isFirst = rank === 1;
+            const lead = hit.timeAheadOfNextMs
+              ? `+${hit.timeAheadOfNextMs.toFixed(1)}ms faster than #2`
+              : 'First in queue';
+
+            const d = hit.adminDecision;
+            const s = hit.adminSlotNumber;
+
+            let verdictTag = '';
+            if (d === 'CONFIRMED_WIN') {
+              const slotTxt = s ? ` (Slot #${s})` : '';
+              verdictTag = `<span class="verdict-tag won"><svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> WON${slotTxt}</span>`;
+            } else if (d === 'MISSED') {
+              verdictTag =
+                '<span class="verdict-tag missed"><svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Missed Top 5</span>';
+            } else {
+              verdictTag =
+                '<span class="verdict-tag pending"><svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg> Pending List</span>';
+            }
+
+            let buttonGroup = '';
+            if (isAdmin) {
+              buttonGroup = `
+                <div class="verdict-button-group">
+                  <button class="btn-verdict win ${d === 'CONFIRMED_WIN' && s === 1 ? 'active' : ''}" onclick="setVerdict('${hit.id}', 'CONFIRMED_WIN', 1)">Slot 1</button>
+                  <button class="btn-verdict win ${d === 'CONFIRMED_WIN' && s === 2 ? 'active' : ''}" onclick="setVerdict('${hit.id}', 'CONFIRMED_WIN', 2)">Slot 2</button>
+                  <button class="btn-verdict win ${d === 'CONFIRMED_WIN' && s === 3 ? 'active' : ''}" onclick="setVerdict('${hit.id}', 'CONFIRMED_WIN', 3)">Slot 3</button>
+                  <button class="btn-verdict win ${d === 'CONFIRMED_WIN' && s === 4 ? 'active' : ''}" onclick="setVerdict('${hit.id}', 'CONFIRMED_WIN', 4)">Slot 4</button>
+                  <button class="btn-verdict win ${d === 'CONFIRMED_WIN' && s === 5 ? 'active' : ''}" onclick="setVerdict('${hit.id}', 'CONFIRMED_WIN', 5)">Slot 5</button>
+                  <button class="btn-verdict miss ${d === 'MISSED' ? 'active' : ''}" onclick="setVerdict('${hit.id}', 'MISSED')">Missed</button>
+                </div>
+              `;
+            }
+
+            return `
+          <tr>
+            <td style="color: var(--text-muted); font-size: 0.8125rem; font-family: 'JetBrains Mono', monospace;">${new Date(hit.timestamp).toLocaleTimeString()}</td>
+            <td><strong>${escapeHtml(hit.clientName)}</strong></td>
+            <td><code>"${escapeHtml(hit.triggerPhrase)}"</code></td>
+            <td>
+              <div class="rank-pill ${isFirst ? 'first' : ''}">
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                #${rank} of ${total} contenders
+              </div>
+              <div style="margin-top: 0.25rem;">
+                <span class="speed-badge">${hit.reactionTimeMs.toFixed(1)} ms</span>
+              </div>
+              <div class="lead-text">
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>
+                ${lead}
+              </div>
+            </td>
+            <td>
+              <div>${verdictTag}</div>
+              ${buttonGroup}
+            </td>
+            <td>
+              <div style="display: flex; gap: 0.4rem; align-items: center;">
+                <button class="btn-secondary btn-sm" onclick="openRaceModal('${hit.id}')" title="Competitor Race Replay">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  Replay
+                </button>
+                <button class="btn-stop btn-sm" onclick="deleteHitRow('${hit.id}')" title="Delete This Record">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+          })
+          .join('');
+      }
+
+      async function deleteHitRow(hitId) {
+        if (!confirm('Are you sure you want to delete this recorded hit row?'))
+          return;
+        try {
+          const res = await fetch(`/api/hits/${encodeURIComponent(hitId)}`, {
+            method: 'DELETE',
+            headers: getAuthHeaders(),
+          }).then((r) => r.json());
+          if (res.success) {
+            showToast('Record deleted');
+            cachedHits = cachedHits.filter((h) => h.id !== hitId);
+            renderHits(cachedHits);
+            fetchData();
+          } else {
+            alert('Failed to delete record: ' + (res.error || 'Unknown error'));
+          }
+        } catch {
+          alert('Error deleting record');
+        }
+      }
+
+      async function setVerdict(hitId, decision, slotNumber = null) {
+        try {
+          const res = await fetch(
+            `/api/hits/${encodeURIComponent(hitId)}/verdict`,
+            {
+              method: 'POST',
+              headers: getAuthHeaders(),
+              body: JSON.stringify({ decision, slotNumber }),
+            },
+          );
+          const data = await res.json();
+          if (data.success) {
+            showToast('Admin verdict locked!');
+            // Update in-memory cached hits immediately so UI reflects change instantly
+            cachedHits.forEach((h) => {
+              if (h.id === hitId) {
+                h.adminDecision = decision;
+                h.adminSlotNumber = slotNumber;
+              }
+            });
+            renderHits(cachedHits);
+            fetchData();
+          } else {
+            alert(
+              'Failed to update verdict: ' + (data.error || 'Unknown error'),
+            );
+          }
+        } catch (err) {
+          console.error(err);
+          alert('Failed to update verdict');
+        }
+      }
+
+      async function openRaceModal(hitId) {
+        const hit = cachedHits.find((h) => h.id === hitId);
+        if (!hit) return;
+
+        document.getElementById('raceTitle').innerHTML = `
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Race Replay — ${escapeHtml(hit.clientName)}
+      `;
+        document.getElementById('raceModal').classList.add('active');
+
+        const contenders = hit.contenders || [
+          {
+            senderId: hit.clientName,
+            body: hit.responseText,
+            deltaMs: hit.reactionTimeMs,
+            isUs: true,
+          },
+        ];
+
+        contenders.sort((a, b) => a.deltaMs - b.deltaMs);
+
+        const timeline = document.getElementById('raceTimeline');
+        timeline.innerHTML = contenders
+          .map((c, idx) => {
+            const medalClass =
+              idx === 0
+                ? 'gold'
+                : idx === 1
+                  ? 'silver'
+                  : idx === 2
+                    ? 'bronze'
+                    : '';
+            const name = c.isUs
+              ? `<strong style="color:#00f2fe;">${escapeHtml(hit.clientName)} (Our Bot)</strong>`
+              : `Competitor (${escapeHtml(c.senderId.slice(-6))})`;
+            return `
+          <div class="race-item ${c.isUs ? 'is-us' : ''}">
+            <div style="display: flex; align-items: center; gap: 0.85rem;">
+              <span class="race-rank-icon ${medalClass}">#${idx + 1}</span>
+              <div>
+                <div>${name}</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem;">"${escapeHtml(c.body)}"</div>
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <div style="color: ${c.isUs ? '#00f2fe' : '#94a3b8'}; font-weight: 700;">+${c.deltaMs.toFixed(1)} ms</div>
+              <div style="font-size: 0.725rem; color: var(--text-muted); margin-top: 0.15rem;">${c.isUs ? 'FIRST DISPATCH' : `+${(c.deltaMs - contenders[0].deltaMs).toFixed(1)}ms behind`}</div>
+            </div>
+          </div>
+        `;
+          })
+          .join('');
+      }
+
+      function closeRaceModal() {
+        document.getElementById('raceModal').classList.remove('active');
+      }
+
+      async function startClient(name) {
+        try {
+          const res = await fetch(
+            `/api/clients/${encodeURIComponent(name)}/start`,
+            { method: 'POST', headers: getAuthHeaders() },
+          ).then((r) => r.json());
+          if (!res.success) alert(res.error || 'Failed to start bot');
+          else showToast(`Bot started for ${name}!`);
+          fetchData();
+        } catch (err) {
+          alert('Error starting bot');
+        }
+      }
+
+      async function stopClient(name) {
+        try {
+          await fetch(`/api/clients/${encodeURIComponent(name)}/stop`, {
+            method: 'POST',
+            headers: getAuthHeaders(),
+          });
+          showToast(`Bot stopped for ${name}`);
+          fetchData();
+        } catch (err) {
+          alert('Error stopping bot');
+        }
+      }
+
+      function openAddModal() {
+        document.getElementById('modalTitle').innerHTML =
+          '<svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add Client Account';
+        document.getElementById('clientForm').reset();
+        document.getElementById('formName').readOnly = false;
+        document.getElementById('addModal').classList.add('active');
+      }
+
+      function editClient(name, thread, trigger, reply) {
+        document.getElementById('modalTitle').innerHTML =
+          `<svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Edit Client: ${escapeHtml(name)}`;
+        document.getElementById('formName').value = name;
+        document.getElementById('formName').readOnly = true;
+        document.getElementById('formThread').value =
+          thread !== 'N/A' ? thread : '';
+        document.getElementById('formTrigger').value =
+          trigger !== 'N/A' ? trigger : '';
+        document.getElementById('formResponse').value =
+          reply !== 'N/A' ? reply : '';
+        document.getElementById('formCookies').value = '';
+        document.getElementById('addModal').classList.add('active');
+      }
+
+      function closeAddModal() {
+        document.getElementById('addModal').classList.remove('active');
+      }
+
+      async function saveClient(e) {
+        e.preventDefault();
+        const payload = {
+          name: document.getElementById('formName').value.trim(),
+          targetThreadId: document.getElementById('formThread').value.trim(),
+          authorizedSenderIds: document
+            .getElementById('formSender')
+            .value.trim(),
+          triggerPhrases: document.getElementById('formTrigger').value.trim(),
+          responseText: document.getElementById('formResponse').value.trim(),
+          typingDelayMs: parseInt(
+            document.getElementById('formTyping').value,
+            10,
+          ),
+          appstate:
+            document.getElementById('formCookies').value.trim() || undefined,
+        };
+
+        try {
+          const res = await fetch('/api/clients', {
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify(payload),
+          }).then((r) => r.json());
+
+          if (res.error) {
+            alert('Error: ' + res.error);
+            return;
+          }
+
+          closeAddModal();
+          showToast('Client profile saved!');
+          fetchData();
+        } catch (err) {
+          alert('Failed to save client profile');
+        }
+      }
+
+      function openLogsModal(name) {
+        document.getElementById('logsTitle').innerHTML = `
+        <svg class="icon" viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+        Live Logs — ${escapeHtml(name)}
+      `;
+        document.getElementById('logsModal').classList.add('active');
+
+        const pollLogs = async () => {
+          try {
+            const data = await fetch(`/api/logs/${encodeURIComponent(name)}`, {
+              headers: getAuthHeaders(),
+            }).then((r) => r.json());
+            const box = document.getElementById('logsContent');
+            if (data.logs.length === 0) {
+              box.textContent =
+                'Bot is currently idle. Click Launch to view live MQTT event stream.';
+            } else {
+              box.textContent = data.logs.join('\n');
+              box.scrollTop = box.scrollHeight;
+            }
+          } catch {}
+        };
+
+        pollLogs();
+        if (activeLogInterval) clearInterval(activeLogInterval);
+        activeLogInterval = setInterval(pollLogs, 1500);
+      }
+
+      function closeLogsModal() {
+        if (activeLogInterval) clearInterval(activeLogInterval);
+        document.getElementById('logsModal').classList.remove('active');
+      }
+
+      async function clearHits() {
+        if (confirm('Clear all recorded winning hits from leaderboard?')) {
+          await fetch('/api/hits', {
+            method: 'DELETE',
+            headers: getAuthHeaders(),
+          });
+          showToast('History cleared');
+          fetchData();
+        }
+      }
+
+      function escapeHtml(str) {
+        if (!str) return '';
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      // Initialize Auth and load view
+      initAuth();
+      setInterval(fetchData, 4000);
+    </script>
+  </body>
+</html>

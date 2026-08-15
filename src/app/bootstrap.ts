@@ -21,6 +21,7 @@ import {
   type ReadinessState,
 } from '../infrastructure/health/health-server.js';
 import { createLogger } from '../infrastructure/logging/logger.js';
+import { HitLogger } from '../infrastructure/logging/hit-logger.js';
 import type { LatencyRecorder } from '../infrastructure/metrics/latency-recorder.js';
 import { RuntimeMetrics } from '../infrastructure/metrics/runtime-metrics.js';
 import { SqliteStateStore } from '../infrastructure/persistence/sqlite-state-store.js';
@@ -81,11 +82,15 @@ export async function bootstrap(
     stores.sessionManager,
   );
   const coordinator = new ResponseCoordinator(transport, config.RESPONSE_TEXT);
+  const hitLogger = new HitLogger(config.HITS_LOG_PATH);
   const processor = new ProcessIncomingMessage(
     rules,
     coordinator,
     logger,
     metrics,
+    hitLogger,
+    config.CLIENT_NAME,
+    config.RESPONSE_TEXT,
   );
   const state: ReadinessState = {
     configValid: true,
