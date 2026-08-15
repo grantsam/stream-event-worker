@@ -82,7 +82,7 @@ const envSchema = z.object({
   ADMIN_KEY: z.string().trim().default('apex_admin'),
   CLIENT_PIN: z.string().trim().default('1234'),
   HEALTH_HOST: z.string().min(1).default('127.0.0.1'),
-  HEALTH_PORT: z.coerce.number().int().min(0).max(65_535).default(3000),
+  HEALTH_PORT: z.coerce.number().int().min(0).max(65_535).default(8080),
   STATE_DB_PATH: z.string().trim().min(1).default('./data/worker.sqlite'),
   APP_STATE_PATH: z.string().trim().min(1).default('./data/appstate.json'),
   HITS_LOG_PATH: z.string().trim().default('./data/hits.jsonl'),
