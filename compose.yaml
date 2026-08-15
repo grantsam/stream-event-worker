@@ -1,0 +1,38 @@
+services:
+  worker:
+    build: .
+    init: true
+    environment:
+      NODE_ENV: production
+      APP_MODE: dry-run
+      LOG_LEVEL: info
+      TRANSPORT_ADAPTER: mock
+      TIMEZONE: Asia/Jakarta
+      TARGET_THREAD_ID: thread-test-001
+      AUTHORIZED_SENDER_IDS: admin-test-001
+      TRIGGER_PHRASES: open book
+      RESPONSE_TEXT: Me down
+      ACTIVE_WINDOWS: MON-SUN@00:00-23:59
+      COOLDOWN_MS: '300000'
+      MAX_EVENT_AGE_MS: '10000'
+      HEALTH_HOST: 0.0.0.0
+      HEALTH_PORT: '3000'
+      STATE_DB_PATH: /data/worker.sqlite
+    volumes:
+      - worker-state:/data
+    ports:
+      - '127.0.0.1:3000:3000'
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "require('node:http').get('http://127.0.0.1:3000/healthz',r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+volumes:
+  worker-state:

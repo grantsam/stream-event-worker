@@ -1,0 +1,40 @@
+services:
+  - type: web
+    name: open-book-worker
+    runtime: node
+    plan: free
+    region: singapore # Change to frankfurt, oregon, or ohio based on your location
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: APP_MODE
+        value: live
+      - key: TRANSPORT_ADAPTER
+        value: live-session
+      - key: TIMEZONE
+        value: Asia/Jakarta
+      - key: TARGET_THREAD_ID
+        sync: false
+      - key: AUTHORIZED_SENDER_IDS
+        sync: false
+      - key: TRIGGER_PHRASES
+        value: open book
+      - key: RESPONSE_TEXT
+        value: Me down
+      - key: ACTIVE_WINDOWS
+        value: MON-SUN@00:00-23:59
+      - key: COOLDOWN_MS
+        value: '5000'
+      - key: MAX_EVENT_AGE_MS
+        value: '10000'
+      - key: STATE_DB_PATH
+        value: /tmp/worker.sqlite
+      - key: APP_STATE_PATH
+        value: ./data/appstate.json
+      - key: SIMULATE_TYPING
+        value: 'true'
+      - key: TYPING_DELAY_MS
+        value: '150'

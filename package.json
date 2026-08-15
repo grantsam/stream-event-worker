@@ -1,0 +1,41 @@
+{
+  "name": "open-book-event-worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "node --env-file-if-exists=.env --watch --import tsx src/index.ts",
+    "fixture": "node --env-file-if-exists=.env --import tsx src/index.ts --fixture",
+    "stream": "node --env-file-if-exists=.env --import tsx src/index.ts --stream",
+    "benchmark": "node --env-file-if-exists=.env --import tsx src/index.ts --benchmark",
+    "soak": "node --env-file-if-exists=.env --import tsx src/index.ts --soak",
+    "regression": "node --env-file-if-exists=.env --import tsx src/index.ts --regression",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/src/index.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build"
+  },
+  "dependencies": {
+    "pino": "10.3.1",
+    "ws3-fca": "^3.5.2",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/node": "24.13.3",
+    "eslint": "10.8.0",
+    "prettier": "3.9.6",
+    "tsx": "4.23.5",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.66.0",
+    "vitest": "4.1.10"
+  }
+}

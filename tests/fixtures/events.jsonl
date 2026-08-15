@@ -1,0 +1,7 @@
+{"eventId":"event-stream-001","threadId":"thread-test-001","senderId":"admin-test-001","body":"open book","receivedAtEpochMs":"$now","sourceTimestampEpochMs":"$now"}
+{"eventId":"event-stream-001","threadId":"thread-test-001","senderId":"admin-test-001","body":"open book","receivedAtEpochMs":"$now","sourceTimestampEpochMs":"$now"}
+{"eventId":"event-stream-002","threadId":"thread-test-001","senderId":"admin-test-001","body":"open book","receivedAtEpochMs":"$now","sourceTimestampEpochMs":"$now"}
+not-json
+{"eventId":"event-stream-003","threadId":"thread-test-001","senderId":"admin-test-001","body":"belum open book","receivedAtEpochMs":"$now","sourceTimestampEpochMs":"$now"}
+{"eventId":"event-stream-004","threadId":"thread-test-001","senderId":"sender-test-other","body":"open book","receivedAtEpochMs":"$now","sourceTimestampEpochMs":"$now"}
+{"eventId":"event-stream-005","threadId":"thread-test-other","senderId":"admin-test-001","body":"open book","receivedAtEpochMs":"$now","sourceTimestampEpochMs":"$now"}

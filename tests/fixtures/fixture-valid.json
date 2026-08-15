@@ -1,0 +1,8 @@
+{
+  "eventId": "event-test-cli-001",
+  "threadId": "thread-test-001",
+  "senderId": "admin-test-001",
+  "body": "open book",
+  "receivedAtEpochMs": "$now",
+  "sourceTimestampEpochMs": "$now"
+}
