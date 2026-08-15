@@ -17,11 +17,17 @@ export interface AppStateValidationResult {
 }
 
 export function loadAppState(filePath: string): AppStateValidationResult {
-  const absolutePath = resolve(filePath);
+  const candidatePaths = [
+    resolve(filePath),
+    resolve('/etc/secrets', filePath),
+    resolve('/etc/secrets/appstate.json'),
+  ];
 
-  if (!existsSync(absolutePath)) {
+  const absolutePath = candidatePaths.find((p) => existsSync(p));
+
+  if (!absolutePath) {
     throw new Error(
-      `AppState cookie file not found at: ${absolutePath}. Export your browser session cookies into this path.`,
+      `AppState cookie file not found at: ${filePath}. Export your browser session cookies into this path or mount as a Secret File on Render.`,
     );
   }
 
